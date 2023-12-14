@@ -18,3 +18,4 @@ A collection of data projects that I've worked on to learn and showcase my skill
 ### Projects
 
 - [Helthcare Dataset](./helthcare-dataset/)
+- [CSV to Database](./csv-to-database/)
