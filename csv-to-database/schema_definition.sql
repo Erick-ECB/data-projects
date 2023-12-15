@@ -16,4 +16,3 @@ CREATE TABLE books (
     ratings_count INTEGER
 );
 
-
