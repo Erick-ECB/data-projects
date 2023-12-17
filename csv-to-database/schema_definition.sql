@@ -4,7 +4,7 @@ CREATE DATABASE book_catalog;
 CREATE TABLE books (
     isbn13 CHAR(13) PRIMARY KEY,
     isbn10 CHAR(10),
-    title VARCHAR(255),
+    title TEXT,
     subtitle VARCHAR(255),
     authors TEXT [],
     categories TEXT [],
