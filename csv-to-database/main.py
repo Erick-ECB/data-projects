@@ -1,6 +1,21 @@
 import pandas as pd
 from connection import connection
 from psycopg2 import sql
+import logging
+import datetime
+import os
+
+log_folder = 'logs'
+os.makedirs(log_folder, exist_ok=True)
+timestamp = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+log_file_path = os.path.join(log_folder, f"log_{timestamp}")
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    filename=log_file_path,
+    filemode="a",
+    format="%(asctime)s - %(levelname)s - %(message)s",
+)
 
 
 def read_csv(csv_file: str) -> pd.DataFrame:
@@ -61,9 +76,9 @@ def insert_rows(cursor, df: pd.DataFrame, table_name: str, columns: tuple):
         try:
             cursor.execute(query, tuple(row))
         except Exception as e:
-            print(f"Error inserting row {index}: {e}")
-            print("Row values:", tuple(row))
-            print("Generated query:", cursor.mogrify(query, tuple(row)))
+            logging.error(f"Error inserting row {index}: {e}")
+            logging.error("Row values:", tuple(row))
+            logging.error("Generated query:", cursor.mogrify(query, tuple(row)))
             raise e
 
 
@@ -88,13 +103,21 @@ def main():
     conn = connection()
     cursor = conn.cursor()
 
-    columns = get_columns(cursor, table_name)
-    df = read_csv(csv)
-    df_processed = preprocess_dataframe(df)
+    try:
+        logging.info("Conected to the database")
 
-    insert_rows(cursor, df_processed, table_name, columns)
+        columns = get_columns(cursor, table_name)
+        df = read_csv(csv)
+        
+        df_processed = preprocess_dataframe(df)
+        logging.info("Preprocessing of the DataFrame is completed")
 
-    close_connection(conn, cursor)
+        insert_rows(cursor, df_processed, table_name, columns)
+        logging.info("Data insertion into the database is completed")
+    except Exception as e:
+        logging.error(f"An error ocurred {str(e)}")
+    finally:
+        close_connection(conn, cursor)
 
 
 if __name__ == "__main__":
