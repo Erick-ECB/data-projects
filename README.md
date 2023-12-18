@@ -19,3 +19,4 @@ A collection of data projects that I've worked on to learn and showcase my skill
 
 - [Helthcare Dataset](./helthcare-dataset/)
 - [CSV to Database](./csv-to-database/)
+- [Wine Review ETL](./wine-review-ETL/)
