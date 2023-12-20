@@ -1,7 +1,7 @@
 import pandas as pd
 import psycopg2
 from psycopg2 import sql
-
+from utils.logging_config import logger
 
 def get_columns(cursor, table_name: str) -> list:
     """Retrieve the column names for a given table."""
@@ -28,10 +28,9 @@ def insert_rows(cursor, df: pd.DataFrame, table_name: str, columns: tuple):
         try:
             cursor.execute(query, tuple(row))
         except Exception as e:
-            print(f"Error inserting row {index}: {e}")
-            print("Row values:", tuple(row))
-            print("Generated query:", cursor.mogrify(query, tuple(row)))
-            raise e
+            logger.error(f"Error inserting row {index}: {e}")
+            logger.error(f"Row values: {tuple(row)}")
+            logger.error(f"Generated query: {cursor.mogrify(query, tuple(row))}")
 
 
 def insert_query(table_name: str, columns: tuple):

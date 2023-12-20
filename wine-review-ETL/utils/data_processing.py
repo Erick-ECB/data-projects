@@ -31,7 +31,6 @@ def obtain_region(df: pd.DataFrame) -> pd.DataFrame:
 
 def deal_with_price(df: pd.DataFrame) -> pd.Series:
     """Fill missing values in 'price' with the median."""
-    print(df.columns)
     return df["price"].fillna(df["price"].median())
 
 
